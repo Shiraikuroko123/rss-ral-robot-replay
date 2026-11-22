@@ -1,0 +1,36 @@
+{
+  "pages": 6,
+  "letter_points": [
+    612,
+    792
+  ],
+  "pdf_author": "",
+  "figures": 6,
+  "main_tables": 1,
+  "cited_references": 16,
+  "independent_rebuild_identical_text": true,
+  "independent_rebuild_identical_render_72dpi": true,
+  "embedded_font_objects": 24,
+  "overfull_boxes": 0,
+  "undefined_references": 0,
+  "archive_files": [
+    "main.tex",
+    "method.tex",
+    "read-value.tex",
+    "protocol.tex",
+    "results.tex",
+    "discussion.tex",
+    "references.bib",
+    "IEEEtran.bst",
+    "ieeeconf.cls",
+    "BUILD.txt",
+    "figures/origin-readback.pdf",
+    "figures/ambiguity.pdf",
+    "figures/fetch-example.pdf",
+    "figures/sawyer-case.pdf",
+    "figures/replay-comparison.pdf",
+    "figures/sawyer-confirmation.pdf"
+  ],
+  "pdf_sha256": "2fe8a90988da98ffeca3f2be1f81554628c8673fa31292f6ed539c2b3325c770",
+  "source_zip_sha256": "c3c9e1cc1218dc1bff0e435eb9327e92fcdd9295d66c885b3ee4bc7f67011015"
+}

@@ -1,0 +1,106 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{times}
+\usepackage[numbers]{natbib}
+\usepackage{amsmath,amssymb,graphicx,booktabs,tabularx,flushend}
+\usepackage[bookmarks=true,hidelinks]{hyperref}
+\hypersetup{pdftitle={When Does Reading a Cartesian Target Change Robot Replay?},pdfauthor={},pdfsubject={Cartesian control and demonstration replay}}
+\newcommand{\clip}{\operatorname{clip}}
+\newcommand{\dist}{\operatorname{dist}}
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\begin{document}
+
+
+\title{When Does Reading a Cartesian Target Change Robot Replay?}
+
+\author{Author Names Omitted for Anonymous Review}
+
+\maketitle
+
+\thispagestyle{empty}\pagestyle{empty}
+
+\begin{abstract}
+
+During demonstration replay, a robot can typically measure its end-effector position, whereas the Cartesian target stored internally by the controller may remain hidden. This paper derives how much reading back that internal target reduces worst-case error under single-step command limits, and then examines how the resulting target shift propagates to physical contact and task outcomes. In a simulated Panda lifting task, a single readback corrects an average command-origin estimation error of $120.32\,\text{mm}$; however, because the upward displacement command is already saturated, the next written target changes by only $0.026\,\text{mm}$ on average. Across 216 paired Sawyer pushing comparisons spanning 24 layouts, every pair differs in its written target by at least $1\,\text{mm}$, and 105 pairs exhibit a measurable change in first contact; readback rescues 6 pushes while causing 12 otherwise successful pushes to fail. Across another 24 layouts (144 test conditions), a state-based policy that schedules readbacks from end-effector motion and command history issues 76 queries and succeeds on the exact same 75 conditions as a no-readback observer. Single-step geometric computation reliably identifies when acquiring the hidden target helps correct the command, yet whether that correction improves physical manipulation still depends on how the end-effector makes contact with the object.
+
+\end{abstract}
+
+\IEEEpeerreviewmaketitle
+
+\section{Introduction}
+
+In a simulated Panda lifting rollout, the replay controller's estimate of the next command origin drifts by approximately $120\,\text{mm}$. Because both compared branches already request the maximum upward displacement at that step, reading back the true origin shifts the next written target by an average of only $0.026\,\text{mm}$. Four control steps later, however, the mean written targets of the two branches diverge by $53.82\,\text{mm}$ (Fig.~\ref{fig:mechanism}). By contrast, during the descent phase, although the initial origin estimation error is smaller, readback shifts the written target by an average of $24.13\,\text{mm}$, yet both branches ultimately lift the block. This contrast raises a central question: under what conditions does reading the controller's internal Cartesian target actually alter task outcomes?
+
+A Cartesian displacement command can be executed either relative to the currently measured end-effector position or relative to the previous target stored by the controller. In the latter mode, if the receiver zeroes out an input without notifying the sender, integrating the sent command history reconstructs an erroneous reference origin. The replay policy must then either infer the target from observed end-effector motion or query the controller directly for a readback.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/study-workflow.pdf}\par
+\makebox[\columnwidth][l]{\small\textsf{\textbf{B\quad Panda measurements}}}\par
+\includegraphics[trim=0 6bp 0 0,clip,width=\columnwidth]{figures/origin-readback.pdf}
+\caption{(A) Two replay branches operate on the same source demonstration by either estimating or reading back the command origin before issuing bounded displacement commands. (See Section IV-F and Fig.~\ref{fig:contact} for Sawyer object trajectories, final frames of both branches, and all paired outcomes.) (B) Divergence between the two branches in written target and end-effector position during Panda descent and lifting. Time zero marks the readback step; thin lines show 8 individual layouts, thick lines show the mean, and labels above denote the mean origin estimation error prior to readback.}
+\label{fig:mechanism}
+\end{figure}
+
+Our central hypothesis is that a single readback improves the next target write only when distinct candidate origins call for different feasible corrections. Action saturation can limit the effect of a read on the next write; Section~III gives the precise condition under which a read leaves the worst-case target loss unchanged. An origin estimate derived from end-effector measurements can also make the worst-case benefit zero. Furthermore, to alter the outcome of a contact-rich task such as pushing, the difference in written targets must also physically affect the manipulated object.
+
+\section{What Is Observable During Replay}
+
+Prior work on action spaces has shown that a robot's low-level control interface substantially shapes learned manipulation behavior \citep{ref1}. For instance, ManiSkill2 converts demonstrations between different action spaces, including controllers referenced to measured poses versus target poses \citep{ref2}, while MimicGen maps end-effector target poses into bounded robot actions \citep{ref3}. Here, we study a controller receiving demonstration commands whose current reference origin may remain hidden to the sender even when the source demonstration and action conventions are known. Under this setting, we evaluate the marginal information gained by directly reading back that reference position.
+
+From a networked control perspective, event-triggered control schedules communication based on state measurements \citep{ref6}, and execution acknowledgments eliminate uncertainty over which inputs actually reached the plant \citep{ref5}. The readback message considered in this work specifically reports the Cartesian target stored inside the controller. Starting from the next target write, we trace how this message cascades through end-effector motion and object contact.
+
+Let $\mathbf{x}_t^\star$ and $\mathbf{x}_t$ denote the end-effector positions immediately before the $t$-th command in the source demonstration and during replay, respectively (superscript $\star$ denotes source-demonstration quantities), and let $\mathbf{g}_t^\star$ be the target written by the $t$-th command in the source demonstration. A readback returns the target currently stored on the receiver. Given the current command's displacement origin $\mathbf{b}$ and commanded displacement $\mathbf{d}$ (both in meters), the controller writes:
+
+\begin{equation}
+F(\mathbf{b},\mathbf{d}) = C(\mathbf{b} + \mathbf{d}), \quad \mathbf{d} \in \mathcal{D} = [-\mathbf{s}, \mathbf{s}].
+\label{eq:e1}
+\end{equation}
+
+Here, $\mathbf{s}$ is a vector of nonnegative per-axis displacement limits, $C$ clips each coordinate to its workspace interval, and vector intervals denote Cartesian products of per-axis intervals. A measured-origin controller sets $\mathbf{b} = \mathbf{x}_t$, whereas an accumulated-origin controller sets $\mathbf{b}$ to the target actually written at the previous step. In accumulated mode, once an input is overwritten or dropped, the same history of sent actions can be consistent with two different origins; only as the controlled arm responds physically does subsequent end-effector motion reveal the discrepancy.
+
+\section{How Much Can One Readback Help?}\label{sec:theory}
+
+We first analyze a single update step. Suppose the true origin $\mathbf{b}$ lies within a known box $\mathcal{B} = [\mathbf{L}, \mathbf{H}]$, the desired target is $\mathbf{h}$, and the next command will reach the target-writing function intact, with an option to read the true origin beforehand. Define the per-step squared target error $\ell(\mathbf{b}, \mathbf{d}) = \Vert{} F(\mathbf{b}, \mathbf{d}) - \mathbf{h} \Vert{}_2^2$. Without and with readback, the achievable worst-case (minimax) losses are:
+
+\begin{equation}
+\begin{aligned}
+V_0 &= \min_{\mathbf{d} \in \mathcal{D}} \max_{\mathbf{b} \in \mathcal{B}} \ell(\mathbf{b}, \mathbf{d}), \\
+V_1 &= \max_{\mathbf{b} \in \mathcal{B}} \min_{\mathbf{d} \in \mathcal{D}} \ell(\mathbf{b}, \mathbf{d}).
+\end{aligned}
+\label{eq:e2}
+\end{equation}
+
+Without readback, a single displacement $\mathbf{d}$ must serve all candidate origins in $\mathcal{B}$. With readback, the replay policy can tailor $\mathbf{d}$ to the observed origin. The gap $V_0 - V_1$ (in $\text{m}^2$) measures the exact reduction in worst-case squared target error afforded by one readback.
+
+\textbf{Closed-form computation.} Fix a coordinate axis and let $b, d, h, L, H, s$ denote the corresponding scalars, keeping $C$ for the per-axis workspace clip. Given $b$, the reachable target interval is $I_b = [C(b - s), C(b + s)]$, whose endpoints vary monotonically with $b$. Consequently, the worst-case distance from $h$ to $I_b$ is:
+
+\[
+r_1 = \max\{\operatorname{dist}(h, I_L),\, \operatorname{dist}(h, I_H)\}.
+\]
+
+If a single displacement $d$ is issued for all candidate origins, the worst-case absolute error is:
+
+\[
+r(d) = \max\{h - C(L + d),\, C(H + d) - h\}.
+\]
+
+As $d$ increases, the first term is nonincreasing and the second term is nondecreasing. If the two terms intersect within $[-s, s]$, their intersection minimizes $r(d)$; otherwise, the optimum lies at one of the action-interval endpoints. Because both terms are piecewise affine, minimizing $r(d)$ only requires evaluating the two action endpoints, the workspace-clipping breakpoints, and any intersections between adjacent breakpoints. The per-axis losses are thus $v_0 = \min_{-s \le d \le s} r(d)^2$ and $v_1 = r_1^2$. Readback strictly reduces the worst-case loss on that axis if and only if no common displacement $d \in [-s, s]$ satisfies both
+
+\begin{equation}
+C(L + d) \ge h - r_1, \quad C(H + d) \le h + r_1.
+\label{eq:e3}
+\end{equation}
+
+Since both $\mathcal{D}$ and $\mathcal{B}$ are Cartesian products and the squared Euclidean loss is additive across axes, $V_k = \sum_{j=1}^3 v_{k,j}$ for $k \in \{0, 1\}$. Note that replacing a non-axis-aligned uncertainty set with an enclosing bounding box ignores cross-axis correlations and alters the modeled uncertainty.
+
+\begin{figure}[t]
+\centering\includegraphics[trim=0 11bp 0 0,clip,width=\columnwidth]{figures/one-step-geometry.pdf}
+\caption{Worst-case Euclidean target distance (in $\text{mm}$) across eight predefined geometric conditions when using a single shared command versus origin-specific commands. Points are computed from Sawyer's native target-writing function across two tasks and two random seeds per task, which coincide exactly. Overlapping symbols on a row indicate that reading the origin does not reduce the worst-case loss under that condition.}
+\label{fig:geometry}
+\end{figure}
+
+We evaluated Sawyer's native target-writing function 1,088 times---probing 17 origins (including all box vertices) per geometry, task, seed, and readback setting. Across every geometric condition, the observed maximum squared errors matched the two analytical losses exactly (Fig.~\ref{fig:geometry}). When the candidate origin interval is wide, readback lowers the worst-case distance from $18\,\text{mm}$ to $8\,\text{mm}$; when no reachable target can attain the desired position, the worst-case distance remains $20\,\text{mm}$ either way. Even when the worst-case losses are equal, readback can still improve performance at specific realized origins.
+
+\input{execution}
+
+\end{document}

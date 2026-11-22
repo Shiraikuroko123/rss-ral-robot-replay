@@ -1,0 +1,130 @@
+\section{Paired Replay Experiments}
+
+\subsection{Preserving Motion from Demonstrations}
+
+For each scripted source demonstration, we record end-effector positions, control targets, command scales, and gripper timing. All compared policies share the exact same initial state and perturbation schedule. The \textbf{direct-copy} policy simply resends the recorded actions open-loop. Under the \textbf{target-reconstruction} policy, the desired target to write is defined via end-effector feedback:
+
+\begin{equation}
+\mathbf{h}_t = \mathbf{g}_t^\star + k(\mathbf{x}_t^\star - \mathbf{x}_t),
+\label{eq:e4}
+\end{equation}
+
+where $k$ is the end-effector position feedback gain. When the replay end-effector position matches the demonstration, $\mathbf{h}_t$ reduces to $\mathbf{g}_t^\star$. Given an origin estimate $\widehat{\mathbf{b}}_t$, the replay policy retains the demonstrated displacement if applying it from $\widehat{\mathbf{b}}_t$ writes $\mathbf{h}_t$; otherwise, it sends the clipped correction:
+
+\[
+\mathbf{d}_t = \operatorname{clip}(\mathbf{h}_t - \widehat{\mathbf{b}}_t, -\mathbf{s}, \mathbf{s}),
+\]
+
+writing the closest reachable target to $\mathbf{h}_t$ from the estimated origin. The controller itself still executes Eq.~\eqref{eq:e1} using its true internal origin $\mathbf{b}_t$.
+
+On Fetch, the current end-effector position serves directly as the command origin. For accumulated-origin controllers, a baseline estimator integrates all sent displacements starting from the known initial target. In contrast, our \textbf{measurement-based observer} combines a prior $\widetilde{\mathbf{b}}_t$ propagated from the previous update with the origin-to-end-effector offset observed in the unperturbed demonstration ($\mathbf{b}_t^\star - \mathbf{x}_t^\star$):
+
+\begin{equation}
+\begin{aligned}
+\mathbf{p}_t &= \mathbf{x}_t + (\mathbf{b}_t^\star - \mathbf{x}_t^\star), \\
+\widehat{\mathbf{b}}_t &= C\big((1 - \alpha)\widetilde{\mathbf{b}}_t + \alpha \mathbf{p}_t\big).
+\end{aligned}
+\label{eq:e5}
+\end{equation}
+
+In the Sawyer contact experiments, we clip $\mathbf{p}_t$ to the workspace before taking the weighted average. When a readback occurs, its value replaces $\widehat{\mathbf{b}}_t$ prior to selecting $\mathbf{d}_t$. Propagating the estimate with the actually sent displacement yields the next prior $\widetilde{\mathbf{b}}_{t+1} = C(\widehat{\mathbf{b}}_t + \mathbf{d}_t)$. All readback and no-readback reconstruction policies on Sawyer and Panda use $k = 0.5$, and after tuning on eight Sawyer development layouts, we fix $\alpha = 0.25$. Policies have no access to live object state or final task scores. Panda experiments schedule readbacks at known post-perturbation steps, whereas Sawyer's event-triggered policy queries based on end-effector error.
+
+\subsection{Switching Command Origins on the Same Robot}
+
+In robosuite 1.5.2 \citep{ref8}, we configure the same Panda controller to run in both measured-origin and accumulated-origin modes across eight block layouts. All eight unperturbed demonstrations per mode succeed. Running at $20\,\text{Hz}$, the gripper closes at step 60 and begins lifting at step 80. We zero out translational inputs at steps 35--39 (descent) or steps 80--84 (lift) while leaving rotation and gripper commands intact; scheduled readbacks return on the step immediately following the perturbation. Four policies, two origin modes, and unperturbed controls yield 192 replays paired by layout, origin mode, intervention condition, and policy. Success requires the block center to be more than $40\,\text{mm}$ above the table at step 120.
+
+\begin{table}[t]
+\centering
+\caption{Number of successful block lifts across eight paired Panda layouts after zeroing five consecutive translational commands during descent.}
+\label{tab:panda}
+\begin{tabularx}{\columnwidth}{@{}>{\raggedright\arraybackslash}Xcc@{}}\toprule
+Replay Rule & \shortstack{Measured\\Origin} & \shortstack{Accumulated\\Origin}\\\midrule
+Direct action copy & 0/8 & 0/8\\
+Re-encode from origin estimate\textsuperscript{\textdagger} & 8/8 & 0/8\\
+Reconstruct from end-effector measurement & 8/8 & 8/8\\
+Same reconstruction + one readback & 8/8 & 8/8\\
+\bottomrule\end{tabularx}\par\smallskip
+{\footnotesize \textsuperscript{\textdagger}Measured mode uses $\mathbf{x}_t$ directly; accumulated mode integrates sent commands from the initial target.}
+\end{table}
+
+Under both origin modes, end-effector feedback recovers all eight descent-perturbed replays (Table~\ref{tab:panda}). When the perturbation is applied during the lift phase, all policies succeed in both modes, with every successful lift remaining above the $40\,\text{mm}$ threshold throughout the final 20 steps.
+
+On the accumulated-origin controller, a single descent readback reduces full-episode end-effector RMS error from $12.90\,\text{mm}$ to $11.12\,\text{mm}$. During lifting, because both branches hit the maximum upward displacement limit on every layout (Fig.~\ref{fig:mechanism}), readback instead slightly increases end-effector RMS error from $16.70\,\text{mm}$ to $17.82\,\text{mm}$.
+
+\subsection{Controls on a Measured-Origin Controller}
+
+Fetch uses the current gripper position as its origin with a $50\,\text{mm}$ per-axis displacement limit (Gymnasium-Robotics 1.4.2 \citep{ref4}). Across 24 held-out layouts each for pushing and pick-and-place, we zero five consecutive translational commands at shared start steps. Direct copying succeeds in 22/48 trials. Setting $k = 0$ without readback, re-encoding from the origin recovers 10 pushes and 9 pick-and-place trials while preserving all prior successes. Its 41/48 score matches unperturbed replay, which also fails 7 pushes. Under external force alone, one push that succeeded under direct copying fails after re-encoding.
+
+\subsection{Evaluating the Observer on New Layouts}
+
+In Meta-World 3.1.1 \citep{ref7}, Sawyer accumulates commands from the previous target with a $10\,\text{mm}$ per-axis limit. With the observer fixed, we collect 12 new layouts each for pushing, pick-and-place, and drawer-opening. Within each layout, all policies share the same demonstration and intervention timing across four conditions: unperturbed, five consecutive translational commands zeroed, a $20\,\text{N}$ force applied to the end-effector along $-y$ for three steps, and both perturbations combined. Tasks are scored at step 150 using built-in success criteria, and end-effector Euclidean RMS error is computed against the demonstration. The observer may trigger a readback after two consecutive steps with end-effector error exceeding $5\,\text{mm}$ (at least 10 steps apart, up to two reads per episode). Confidence intervals are computed via stratified bootstrap resampling by layout within each task (10,000 replicates, keeping all four conditions per sampled layout with equal task weights).
+
+Integrating sent commands succeeds in 134/144 replays. Adding 112 readbacks---or switching to measurement-based reconstruction alone---recovers the exact same 6 replays without breaking any prior successes. Adding 123 readbacks on top of measurement-based reconstruction leaves all paired outcomes unchanged at 140/144, while reducing mean end-effector RMS error by $0.039\,\text{mm}$ from $2.830\,\text{mm}$ (95\% CI: $[0.012, 0.068]\,\text{mm}$). All four remaining failures occur in pushing. With only 12 layouts per task, rare effects remain difficult to assess.
+
+\subsection{Degrading End-Effector Precision and Adding Delay}
+
+To test robustness under degraded sensing and communication, we round live end-effector coordinates to a world-frame grid and delay both end-effector samples and target packets by two control steps, keeping demonstration recording precision unchanged. Between samples, the replay policy propagates the latest end-effector residual along the demonstration and advances returned targets using sent actions. The event-triggered rule allows at most one readback per episode after two consecutive steps with error above $5\,\text{mm}$, evaluated across 24 pushing and pick-and-place layouts under the same four conditions. When end-effector coordinates are continuous or rounded to a $1\,\text{mm}$ grid, both no-readback and readback policies achieve 94/96. On a $5\,\text{mm}$ grid, the observer alone achieves 91/96, improving to 94/96 with event-triggered readback; the three recovered trials occur across two pushing layouts. Notably, the rule issues a request in all 96 trials, including unperturbed runs.
+
+On another 24 new layouts, we compare two predetermined schedules: reading at fixed step 41 (the median trigger step from exploration) and permuting the exploration-phase read steps. All four policies---no-read, event-triggered, fixed-step, and permuted-step---achieve 96/96 success, issuing 0, 94, 96, and 96 requests with mean end-effector RMS errors of $6.409$, $6.227$, $6.293$, and $6.399\,\text{mm}$, respectively. Because performance saturates at ceiling, this set cannot estimate how often readbacks rescue failing trials.
+
+\subsection{Tracing Target Writes to Object Contact}
+
+In the three recovered trials above, every branch pair made first contact at the exact same step. To examine how target shifts propagate through physical contact, we offset the object by $-24$, $0$, or $+24\,\text{mm}$ across 24 new Sawyer layouts. Starting 19 steps before the gripper pads' first contact in the demonstration, the target writer drops five consecutive translational inputs. From identical states, we compare a measurement-only observer branch against a branch receiving one synchronous readback at 12, 5, or 1 steps before demonstrated contact. Each no-readback trajectory is shared across the three readback timings, yielding 216 paired comparisons from 288 replays.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/paired-push-paths.pdf}\par
+{\footnotesize\sffamily
+\makebox[.495\columnwidth]{No read, 44.2 mm}%
+\makebox[.495\columnwidth]{One read, 96.2 mm}\par}
+\includegraphics[width=\columnwidth]{figures/sawyer-push-terminal-views.pdf}\par
+\includegraphics[trim=0 4bp 0 0,clip,width=\columnwidth]{figures/read-contact.pdf}
+\caption{(Top) Object pushing trajectories in Sawyer layout 9123600 under $\pm 24\,\text{mm}$ initial object offsets, with dots marking final positions. This is the lowest-numbered layout exhibiting opposite outcome flips under mirrored offsets, shown at the shortest qualifying lead time (readback at step 36). (Middle) Matched camera views at the end of step 149 (0-indexed) for the negative-offset branches; the red cylinder is the object, the green sphere is the goal, and labels report final 3D distances from the simulator. (Bottom) Summary of first-contact changes and final outcomes across all 216 pairs; ``Saved'' denotes readback-only success and ``Broken'' denotes no-readback-only success.}
+\label{fig:contact}
+\end{figure}
+
+Within the layout shown in Fig.~\ref{fig:contact}, every pair makes first contact on the same step, yet outcomes diverge sharply: under the $+24\,\text{mm}$ offset, readback reduces final 3D object-to-goal distance from $52.2\,\text{mm}$ to $41.1\,\text{mm}$, whereas under the $-24\,\text{mm}$ offset, it worsens the distance from $44.2\,\text{mm}$ to $96.2\,\text{mm}$. Across all 216 pairs, the median difference in the next written target is $6.40\,\text{mm}$. A total of 105 pairs exhibit at least one first-contact change: a change in whether a pad touches the object, a shift in the first-contact step, or at least a $2\,\text{mm}$ shift of the first-contact point in the object frame. Of these 105 pairs, 12 flip final outcomes; however, 6 of the remaining 111 pairs also flip outcomes. Detecting first-contact changes alone therefore misses some outcome-reversing cases.
+
+Overall, the readback branch succeeds in 126/216 pairs versus 132/216 without readback, a difference of $-2.78$ percentage points (95\% layout-bootstrap CI: $[-5.56, -0.46]$). Before running the paired replays, we flagged queries that were within 5 steps of demonstrated contact and predicted at least a $1\,\text{mm}$ write difference from end-effector measurements. Of the 88 flagged pairs, 59 show first-contact changes, compared to 46 of the 128 unflagged pairs. Even when restricting attention to the 59 flagged pairs that also have nonzero object offsets, only 6 flip final outcomes, while 12 flips occur outside this subset.
+
+\subsection{Selecting When to Read}
+
+Using six development layouts, we selected and froze a state-based readback rule and evaluated it on 24 held-out Sawyer layouts. Each layout pairs the same three object positions with two input conditions (intact commands or five consecutive translational commands dropped), totaling 144 conditions. Within 18 steps before demonstrated contact, the rule may issue one query whenever end-effector deviation reaches $2.5\,\text{mm}$ and predicted target-write change reaches $1\,\text{mm}$. It has access to the demonstration, end-effector position, and command history, while object offsets and input faults remain hidden.
+
+This state-based rule queries in all 72 dropped-input conditions and 4 of the 72 intact-command conditions. Its final outcome matches the no-readback observer and permuted-timing policy on every single pair (Fig.~\ref{fig:readbudget}). Compared with the paired fixed-timing policy---which reads one step before demonstrated contact, the best fixed step in development---the state rule saves one push and loses one, yielding a $0$ percentage-point difference (95\% layout-bootstrap CI: $[-2.08, 2.08]$). All six compared policies succeed in 75/144 pushes: 73 conditions succeed under all six policies, 67 fail under all six, and only 4 show any disagreement. Even an oracle selecting the best policy per condition post hoc could achieve at most 77/144.
+
+\begin{figure}[t]
+\centering\includegraphics[trim=0 12bp 0 0,clip,width=\columnwidth]{figures/heldout-read-policy.pdf}
+\caption{All four conditions out of the 144 held-out Sawyer pushing conditions where the six compared policies disagree on final success. Dots denote success and crosses denote failure. Layouts A--D are ordered by random seed; all involve dropped inputs with object offsets of $-24$, $+24$, $+24$, and $-24\,\text{mm}$, respectively. Read counts are totaled across all 144 pushes.}
+\label{fig:readbudget}
+\end{figure}
+
+\subsection{Packet Delay and Target-Change Prediction}
+
+On another 24 Sawyer layouts, we sample packets every three steps with a two-step delivery delay, carrying either three binary execution flags or the target at the sampling step. When commands are either passed intact or zeroed, both message types yield identical commands and end-effector trajectories across all 96 pairs. However, when five forwarded translational inputs are attenuated to one-quarter amplitude after the flag, mean end-effector RMS errors over 48 conditions are $10.126$, $5.149$, and $6.679\,\text{mm}$ for execution flags, target values, and empty packets, respectively (all completing 48/48 trials). Forwarding flags alone cannot verify the magnitude actually applied.
+
+Assuming forwarded inputs are applied at full magnitude places the true origin outside the estimated box $\mathcal{B}$ in 5,025 of 7,200 attenuated steps, whereas allowing transmission gains between 25\% and 100\% covers all steps. Assuming the next command arrives intact, we also predict whether a readback will alter the written target by at least $1\,\text{mm}$. A shallow gradient-boosted tree classifier trained on eight layouts using origin bounds, sent commands, end-effector error, and received messages achieves 91.0\% balanced accuracy across 16 held-out layouts (43,200 correlated steps), compared to 85.8\% for a sent-command integration baseline; geometry alone resolves 2,861 of these steps with 100\% accuracy.
+
+
+
+\section{Implications and Limitations}
+
+Replay logs should record the command origin, command scale, initial target, and exact timing. For measured-origin controllers, end-effector measurements directly supply the origin; for accumulated-origin controllers, reconstructing the origin additionally requires knowing what inputs actually reached the target-writing function.
+
+Our contact experiments rely on scripted pushing trajectories, synchronous readbacks, and known demonstration timing. Artificial object offsets and injected faults do not establish how often readbacks help in real-world deployment, and delayed packets describe stale states. Hardware validation will therefore require synchronized logging of applied low-level inputs, end-effector motion, and object contact.
+
+\section{Conclusion}
+
+Action limits govern how much correcting a command origin alters the next written target, while physical contact governs how that shift affects the manipulated object. In paired pushing trials, reading back the target can both rescue failing rollouts and break otherwise successful ones. Although end-effector motion and command history often expose dropped inputs, using them to schedule readbacks did not yield a net improvement in pushing success in our held-out timing experiments.
+
+\section*{AI Tool Usage Disclosure}
+
+OpenAI Codex assisted with experiment design, implementation, execution, literature verification, data analysis, plotting, and manuscript drafting.
+
+\flushcolsend
+
+\clearpage
+
+\raggedcolsend
+
+\input{references-author}

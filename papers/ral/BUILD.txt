@@ -1,0 +1,11 @@
+Compile the anonymous RA-L initial manuscript on US Letter paper using pdfLaTeX,
+BibTeX, and the standard LaTeX packages named in main.tex. Run in this order:
+
+  pdflatex main.tex
+  bibtex main
+  pdflatex main.tex
+  pdflatex main.tex
+
+The source ZIP contains all six manuscript sections, the .bib and IEEE .bst,
+the original ieeeconf.cls, and all six PDF figures. No network access or
+external graphics generation is needed to rebuild the manuscript.

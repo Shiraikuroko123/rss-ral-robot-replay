@@ -1,0 +1,40 @@
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}
+\IEEEoverridecommandlockouts
+\overrideIEEEmargins
+\usepackage[T1]{fontenc}
+\usepackage{times,amsmath,amssymb,graphicx,booktabs,cite,url}
+\usepackage[hidelinks,pdfauthor={},pdftitle={When Does Controller Target Readback Help Cartesian Demonstration Replay?}]{hyperref}
+\ifdefined\pdfminorversion\pdfminorversion=5\fi
+\title{\LARGE\bf When Does Controller Target Readback Help\\ Cartesian Demonstration Replay?}
+\author{\phantom{Anonymous Author}}
+\begin{document}
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+\begin{abstract}
+A robot replaying a Cartesian demonstration can observe its hand and remember every command it sent, yet still lose track of the target stored by its controller. When does reading that target improve manipulation? We derive the worst error achievable on the next bounded target write with and without a read, then compare policies on matched simulated arm trajectories. On Fetch, re-encoding displacements relative to the measured hand rescued 19 of 48 layouts after a five-step input override without a target read. On Sawyer, a hand-based observer succeeded in 140 of 144 trials. Adding 123 reads changed none of the terminal outcomes and reduced mean hand-path error by 0.039\,mm. On a simulated Panda, direct copying failed on all eight descent overrides in each of two controller modes, while hand-based reconstruction recovered all eight. During lift, reading the accumulating controller corrected a 120.32\,mm mean origin estimate error but changed its next target by only 0.026\,mm on average. Three read-only successes with coarse hand measurements did not recur on 24 new layouts. These results identify when readback can change a command and show how command limits and hand feedback constrain its value for task completion.
+\end{abstract}
+\begin{keywords}Motion Control, Performance Evaluation and Benchmarking.\end{keywords}
+
+\section{Introduction}
+A replay program sends a displacement to a robot arm, then discovers that the hand is behind the demonstration. If the controller adds the next displacement to the measured hand position, the program can recompute the command from that measurement. If the controller adds it to a stored target, the same measurement can be consistent with several command histories. Reading the stored target resolves its current value. Whether the robot can use that information to bring an object to its goal is a separate question (Fig.~\ref{fig:origin}).
+\begin{figure}[t]
+\centering\includegraphics[width=\columnwidth]{figures/origin-readback.pdf}
+\caption{(a) The same displacement starts at the measured hand or the previous target, depending on the controller. (b) At the first command after a five-step override on the accumulating Panda, the mean error in the estimated origin (open diamond) can greatly exceed the change in the target actually written after a read (filled circle). Values average eight matched layouts per phase.}\label{fig:origin}
+\end{figure}
+Action definitions vary across robot datasets and can affect transfer~\cite{openx2024,aljalbout2024action}. ManiSkill2 distinguishes measured and desired command references when converting demonstrations~\cite{gu2023maniskill2}. MimicGen converts target poses into bounded actions~\cite{mimicgen2023}. These methods motivate an execution question. When an applied input differs from the one recorded by the sender, which observation should a replay program use to reconstruct its next displacement?
+
+Reference governors and reactive trajectory adaptation address command constraints and feedback during execution~\cite{governor,vochten2021}. Event-triggered control and estimation relate communication to a control or estimation objective~\cite{tabuada,trimpe}. Input acknowledgments can inform a controller about losses~\cite{schenato}, and event-triggered communication has supported cooperative manipulation~\cite{cooperative}. We examine a specific message in single-arm replay, the receiver's current Cartesian target. Its value depends on what the measured hand and submitted commands already reveal.
+
+We derive a tight one-write error bound, then compare the same hand-based observer with and without target reads during simulated push, grasp and drawer trials. Switching the command origin on the same Panda isolates the interface from robot identity. Physical recordings and a Franka controller filter identify which telemetry could support reconstruction on hardware.
+\input{method}
+\input{read-value}
+\input{protocol}
+\input{results}
+\input{discussion}
+\section*{Acknowledgment}
+OpenAI Codex assisted with experimental design, implementation and execution, literature checks, analysis, figure code and drafting throughout the article. The robot images in Figs.~\ref{fig:fetch} and~\ref{fig:sawyer} are native simulation renders.
+\IEEEtriggeratref{7}
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+\end{document}

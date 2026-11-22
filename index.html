@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f4f1ea" />
+    <meta
+      name="description"
+      content="Robot Replay Research — two independent studies of hidden Cartesian controller targets, physical tracking, and the value of target readback."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Robot Replay Research | RSS + RA-L" />
+    <meta
+      property="og:description"
+      content="When does reading a hidden controller target change a robot replay, and when is hand feedback enough?"
+    />
+    <meta property="og:url" content="https://shiraikuroko123.github.io/rss-ral-robot-replay/" />
+    <meta property="og:image" content="assets/rss-study-workflow.png" />
+    <meta property="og:image:alt" content="Study workflow for robot replay target readback" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href="https://shiraikuroko123.github.io/rss-ral-robot-replay/" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css?v=1" />
+    <script src="app.js?v=1" defer></script>
+    <title>Robot Replay Research · RSS + RA-L</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell header-inner">
+        <a class="wordmark" href="#top" aria-label="Robot Replay Research home">
+          <span class="wordmark-dot"></span>
+          <span>ROBOT REPLAY<br /><em>RESEARCH</em></span>
+        </a>
+        <nav class="nav" aria-label="Primary navigation">
+          <a href="#question">Question</a>
+          <a href="#papers">Papers</a>
+          <a href="#evidence">Evidence</a>
+          <a href="#reproduce">Reproduce</a>
+        </nav>
+        <div class="header-tools">
+          <a class="header-link" href="https://github.com/Shiraikuroko123/rss-ral-robot-replay" target="_blank" rel="noreferrer">GitHub ↗</a>
+        </div>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero" id="top">
+        <div class="shell hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">RSS + IEEE RA-L · SUBMISSION RESEARCH PAGE · 2026</p>
+            <h1>When a robot<br /><span>replays the past,</span><br />what can it know?</h1>
+            <p class="hero-lede">
+              Two controlled studies separate the value of reading a hidden Cartesian controller target from the
+              physical question that follows: does the corrected command actually change contact and task outcome?
+            </p>
+            <div class="hero-actions">
+              <a class="button button-dark" href="#papers">Explore the two papers <span>↓</span></a>
+              <a class="text-button" href="papers/rss/rss-manuscript.pdf">Read RSS manuscript ↗</a>
+            </div>
+            <div class="hero-note">
+              <span class="status-mark"></span>
+              <span>Simulation studies · paired replay protocol · evidence-first release</span>
+            </div>
+          </div>
+          <div class="hero-figure">
+            <div class="hero-figure-top">
+              <span>THE RESEARCH QUESTION</span>
+              <span>01 / 02</span>
+            </div>
+            <div class="hero-image-wrap">
+              <img src="assets/rss-study-workflow.png" alt="RSS study workflow from hidden target readback to physical contact and task outcome" />
+              <div class="figure-stamp">ORIGIN → WRITE → CONTACT</div>
+            </div>
+            <p class="figure-caption">
+              A replay is not defined by the command alone. It depends on the controller origin, the bounded write,
+              and the contact geometry that follows.
+            </p>
+          </div>
+        </div>
+        <div class="shell metric-rail" aria-label="Research metrics">
+          <div class="metric">
+            <strong>216</strong>
+            <span>paired Sawyer pushing comparisons</span>
+          </div>
+          <div class="metric">
+            <strong>144</strong>
+            <span>held-out RA-L replay conditions</span>
+          </div>
+          <div class="metric">
+            <strong>105</strong>
+            <span>RSS pairs with a first-contact change</span>
+          </div>
+          <div class="metric metric-accent">
+            <strong>0.039 mm</strong>
+            <span>RA-L mean hand-path reduction from 123 reads</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section question-section" id="question">
+        <div class="shell narrow">
+          <p class="section-index">01 / THE QUESTION</p>
+          <h2>One hidden state creates two different research problems.</h2>
+          <p class="section-intro">
+            A replay controller may hold a Cartesian target that the policy cannot directly observe. A sender can
+            reconstruct what it believes it wrote, while the receiver may contain a different target after an
+            overwritten or dropped input. The two papers examine this ambiguity at different levels.
+          </p>
+        </div>
+        <div class="shell split-question">
+          <article class="question-card rss-tint">
+            <div class="card-top"><span>RSS</span><span>WHY / WHEN</span></div>
+            <h3>When does target readback change the replay?</h3>
+            <p>
+              Readback reduces worst-case target error only when origin-specific corrections are reachable under the
+              controller's action limits. RSS then follows the corrected write through first contact and final object
+              outcome.
+            </p>
+            <a href="#rss-study">Open the RSS study <span>↓</span></a>
+          </article>
+          <article class="question-card ral-tint">
+            <div class="card-top"><span>RA-L</span><span>WHAT / HOW MUCH</span></div>
+            <h3>When is hand feedback enough?</h3>
+            <p>
+              RA-L separates target-writing error from physical tracking error. It tests whether hand measurements,
+              command history, and sparse reads recover the same replay outcomes across Fetch, Sawyer, and Panda.
+            </p>
+            <a href="#ral-study">Open the RA-L study <span>↓</span></a>
+          </article>
+        </div>
+        <div class="shell relation-line">
+          <span class="line-dot"></span>
+          <span>Shared setting: Cartesian demonstration replay with bounded target writes</span>
+          <span class="line-rule"></span>
+          <span>Independent claims · independent experiments</span>
+        </div>
+      </section>
+
+      <section class="section papers-section" id="papers">
+        <div class="shell section-heading">
+          <div>
+            <p class="section-index">02 / THE PAPERS</p>
+            <h2>Two papers, two claims.</h2>
+          </div>
+          <p class="section-side-note">
+            The page follows the project-page pattern used by OpenVLA, Octo, Mobile ALOHA, and PointWorld:
+            claim → method → measured evidence → limitations → source.
+          </p>
+        </div>
+        <div class="shell paper-list">
+          <article class="paper-row" id="rss-study">
+            <div class="paper-label paper-label-rss">
+              <span class="paper-acronym">RSS</span>
+              <span class="paper-status">submission draft</span>
+            </div>
+            <div class="paper-body">
+              <h3>When Does Reading a Cartesian Target Change Robot Replay?</h3>
+              <p class="paper-authors">Zhangwei Chen · Robotics: Science and Systems submission draft</p>
+              <p>
+                A minimax analysis identifies when one readback can reduce the next bounded target-write error.
+                Paired Sawyer pushing experiments then show that a changed target can rescue a rollout, break another,
+                or leave the final outcome unchanged because contact geometry dominates.
+              </p>
+              <div class="paper-links">
+                <a class="button button-dark small" href="papers/rss/rss-manuscript.pdf">Paper PDF ↗</a>
+                <a class="button button-light small" href="papers/rss/main.tex">Source</a>
+                <a class="button button-light small" href="#rss-evidence">Evidence ↓</a>
+              </div>
+            </div>
+            <div class="paper-aside">
+              <div class="aside-stat"><strong>126 / 216</strong><span>readback success</span></div>
+              <div class="aside-stat"><strong>132 / 216</strong><span>no-readback success</span></div>
+              <div class="aside-stat"><strong>−2.78 pp</strong><span>paired difference</span></div>
+            </div>
+          </article>
+          <article class="paper-row" id="ral-study">
+            <div class="paper-label paper-label-ral">
+              <span class="paper-acronym">RA-L</span>
+              <span class="paper-status">manuscript draft</span>
+            </div>
+            <div class="paper-body">
+              <h3>When Does Controller Target Readback Help Cartesian Demonstration Replay?</h3>
+              <p class="paper-authors">Zhangwei Chen · IEEE Robotics and Automation Letters manuscript</p>
+              <p>
+                A cross-embodiment replay study tests where the error lives. Hand-based reconstruction recovers
+                failed Fetch and Panda replays without a read, while event-triggered reads on Sawyer reduce hand-path
+                error by 0.039 mm without changing the 144 terminal outcomes.
+              </p>
+              <div class="paper-links">
+                <a class="button button-dark small" href="papers/ral/ral-manuscript.pdf">Paper PDF ↗</a>
+                <a class="button button-light small" href="papers/ral/main.tex">Source</a>
+                <a class="button button-light small" href="#ral-evidence">Evidence ↓</a>
+              </div>
+            </div>
+            <div class="paper-aside">
+              <div class="aside-stat"><strong>140 / 144</strong><span>hand observer</span></div>
+              <div class="aside-stat"><strong>123</strong><span>event reads</span></div>
+              <div class="aside-stat"><strong>+0</strong><span>terminal outcome changes</span></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section evidence-section" id="evidence">
+        <div class="shell section-heading">
+          <div>
+            <p class="section-index">03 / MEASURED EVIDENCE</p>
+            <h2>Follow the write until it reaches the object.</h2>
+          </div>
+          <p class="section-side-note">
+            Every figure is a released artifact. Captions state the robot, task, simulation status, comparison, and
+            what the measurement does not establish.
+          </p>
+        </div>
+
+        <div class="shell study-panel rss-panel" id="rss-evidence">
+          <div class="study-header">
+            <div>
+              <span class="study-kicker">RSS / CONTACT PROPAGATION</span>
+              <h3>Readback can change the write without improving the task.</h3>
+            </div>
+            <div class="study-pullquote">
+              <strong>105 / 216</strong>
+              <span>pairs changed first contact</span>
+            </div>
+          </div>
+          <div class="study-grid">
+            <div class="study-copy">
+              <p>
+                The held-out Sawyer cohort injects a five-step translational input drop and three object offsets.
+                The no-readback observer and synchronous-readback branch start from matched states and share the same
+                replay tape.
+              </p>
+              <div class="evidence-table">
+                <div><span>Readback branch</span><strong>126 / 216</strong></div>
+                <div><span>No-readback branch</span><strong>132 / 216</strong></div>
+                <div><span>Outcome flips</span><strong>18 total</strong></div>
+                <div><span>Layout-bootstrap 95% CI</span><strong>[−5.56, −0.46] pp</strong></div>
+              </div>
+              <p class="boundary">
+                <b>Boundary.</b> These are scripted simulated pushing replays with known intervention timing. They
+                establish how contact mediates a target change, not the deployment frequency of readbacks on a real arm.
+              </p>
+            </div>
+            <figure class="study-figure">
+              <img src="assets/rss-paired-push.png" alt="RSS paired pushing paths and terminal outcome comparison" loading="lazy" />
+              <figcaption>RSS Fig. 3 · Paired Sawyer pushing paths and terminal outcomes.</figcaption>
+            </figure>
+          </div>
+          <div class="figure-strip">
+            <figure>
+              <img src="assets/rss-read-contact.png" alt="RSS contact readback result figure" loading="lazy" />
+              <figcaption>First-contact changes do not fully predict outcome flips.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/rss-study-workflow.png" alt="RSS study workflow figure" loading="lazy" />
+              <figcaption>Study workflow from origin to write to physical contact.</figcaption>
+            </figure>
+          </div>
+        </div>
+
+        <div class="shell study-panel ral-panel" id="ral-evidence">
+          <div class="study-header">
+            <div>
+              <span class="study-kicker">RA-L / ERROR DIAGNOSIS</span>
+              <h3>Hand feedback often resolves the replay before a readback is needed.</h3>
+            </div>
+            <div class="study-pullquote">
+              <strong>0 / 144</strong>
+              <span>terminal outcomes changed by 123 reads</span>
+            </div>
+          </div>
+          <div class="study-grid">
+            <div class="study-copy">
+              <p>
+                The study compares direct command history, hand-based reconstruction, event-triggered readback, and
+                fixed schedules across Fetch, Sawyer, and Panda. The central comparison keeps the observer fixed and
+                varies access to the hidden controller target.
+              </p>
+              <div class="evidence-table">
+                <div><span>Hand observer</span><strong>140 / 144</strong></div>
+                <div><span>Event reads on observer</span><strong>140 / 144</strong></div>
+                <div><span>Mean hand RMS reduction</span><strong>0.039 mm</strong></div>
+                <div><span>Paired 95% CI</span><strong>[0.012, 0.068] mm</strong></div>
+              </div>
+              <p class="boundary">
+                <b>Boundary.</b> The guarantee is local to a delivered write and the evidence is simulation-based.
+                It does not establish hard real-time behavior or a universal readback schedule.
+              </p>
+            </div>
+            <figure class="study-figure">
+              <img src="assets/ral-origin-readback.png" alt="RA-L controller origin readback and replay comparison figure" loading="lazy" />
+              <figcaption>RA-L Fig. 1 · Hidden controller origin and replay correction.</figcaption>
+            </figure>
+          </div>
+          <div class="figure-strip">
+            <figure>
+              <img src="assets/ral-replay-comparison.png" alt="RA-L replay comparison figure" loading="lazy" />
+              <figcaption>Cross-embodiment comparison of reconstruction and readback.</figcaption>
+            </figure>
+            <figure>
+              <img src="assets/ral-confirmation.png" alt="RA-L confirmation cohort paired outcomes" loading="lazy" />
+              <figcaption>Confirmation cohort with matched terminal outcomes.</figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section class="section relation-section">
+        <div class="shell relation-grid">
+          <div>
+            <p class="section-index">04 / HOW THEY FIT</p>
+            <h2>A shared setup, two non-overlapping conclusions.</h2>
+          </div>
+          <div class="relation-copy">
+            <div class="relation-item">
+              <span class="relation-number">01</span>
+              <p><b>RSS asks whether a read changes the physical replay.</b> Its main evidence is contact propagation and paired task outcome.</p>
+            </div>
+            <div class="relation-item">
+              <span class="relation-number">02</span>
+              <p><b>RA-L asks where the error comes from and whether a read is necessary.</b> Its main evidence is cross-embodiment reconstruction and observer diagnosis.</p>
+            </div>
+            <div class="relation-item">
+              <span class="relation-number">03</span>
+              <p><b>Both papers keep their claims bounded.</b> Neither claims real-robot deployment or a universal readback policy.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section reproduce-section" id="reproduce">
+        <div class="shell reproduce-grid">
+          <div>
+            <p class="section-index">05 / REPRODUCE</p>
+            <h2>Read the figures, then open the sources.</h2>
+            <p class="section-intro">
+              The repository keeps the two paper trees separate. PDFs are linked directly from each paper row, while
+              the source, figures, references, and verification records remain available beside them.
+            </p>
+            <div class="artifact-list">
+              <a href="https://github.com/Shiraikuroko123/rss-ral-robot-replay/tree/main/papers/rss" target="_blank" rel="noreferrer"><span>RSS source tree</span><b>papers/rss/ ↗</b></a>
+              <a href="https://github.com/Shiraikuroko123/rss-ral-robot-replay/tree/main/papers/ral" target="_blank" rel="noreferrer"><span>RA-L source tree</span><b>papers/ral/ ↗</b></a>
+              <a href="README.md"><span>Repository README</span><b>README.md ↗</b></a>
+              <a href="https://github.com/Shiraikuroko123/rss-ral-robot-replay" target="_blank" rel="noreferrer"><span>GitHub repository</span><b>Open source ↗</b></a>
+            </div>
+          </div>
+          <div class="citation-block">
+            <div class="citation-header"><span>CITATION / PREPRINT DRAFT</span><button type="button" data-copy-citation>Copy</button></div>
+            <pre id="citation"><code>@misc{chen_robot_replay_2026,
+  author = {Chen, Zhangwei},
+  title  = {Robot Replay Research: RSS and RA-L Studies},
+  year   = {2026},
+  note   = {Submission manuscripts and reproducible figures}
+}</code></pre>
+            <p>Publication status is shown on each paper row and will be updated when a venue decision exists.</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell footer-inner">
+        <div><span class="footer-mark">RR</span><span>Robot Replay Research</span></div>
+        <span>Independent research · Zhangwei Chen · 2026</span>
+        <a href="#top">Back to top ↑</a>
+      </div>
+    </footer>
+  </body>
+</html>
