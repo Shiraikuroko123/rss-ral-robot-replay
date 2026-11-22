@@ -15,9 +15,15 @@
       content="When does reading a hidden controller target change a robot replay, and when is hand feedback enough?"
     />
     <meta property="og:url" content="https://shiraikuroko123.github.io/rss-ral-robot-replay/" />
-    <meta property="og:image" content="assets/rss-study-workflow.png" />
+    <meta property="og:image" content="https://shiraikuroko123.github.io/rss-ral-robot-replay/assets/rss-study-workflow.png" />
     <meta property="og:image:alt" content="Study workflow for robot replay target readback" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Robot Replay Research | RSS + RA-L" />
+    <meta
+      name="twitter:description"
+      content="Two controlled studies of hidden Cartesian controller targets, physical tracking, and target readback."
+    />
+    <meta name="twitter:image" content="https://shiraikuroko123.github.io/rss-ral-robot-replay/assets/rss-study-workflow.png" />
     <link rel="canonical" href="https://shiraikuroko123.github.io/rss-ral-robot-replay/" />
     <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
     <link rel="stylesheet" href="styles.css?v=1" />
@@ -72,11 +78,21 @@
             <div class="hero-image-wrap">
               <img src="assets/rss-study-workflow.png" alt="RSS study workflow from hidden target readback to physical contact and task outcome" />
               <div class="figure-stamp">ORIGIN → WRITE → CONTACT</div>
+            <div class="scanline" aria-hidden="true"></div>
             </div>
             <p class="figure-caption">
               A replay is not defined by the command alone. It depends on the controller origin, the bounded write,
               and the contact geometry that follows.
             </p>
+          <div class="signal-orbit" aria-label="Animated research path">
+            <span class="orbit-node node-one">OBSERVE</span>
+            <span class="orbit-line line-one"></span>
+            <span class="orbit-node node-two">READ / INFER</span>
+            <span class="orbit-line line-two"></span>
+            <span class="orbit-node node-three">WRITE</span>
+            <span class="orbit-line line-three"></span>
+            <span class="orbit-node node-four">CONTACT</span>
+          </div>
           </div>
         </div>
         <div class="shell metric-rail" aria-label="Research metrics">
@@ -95,6 +111,18 @@
           <div class="metric metric-accent">
             <strong>0.039 mm</strong>
             <span>RA-L mean hand-path reduction from 123 reads</span>
+          </div>
+        </div>
+        <div class="shell motion-rail" aria-label="Research evidence path">
+          <span class="motion-tag">EVIDENCE PATH</span>
+          <div class="motion-track">
+            <span class="motion-point active">source tape</span>
+            <i></i>
+            <span class="motion-point">hidden origin</span>
+            <i></i>
+            <span class="motion-point">bounded write</span>
+            <i></i>
+            <span class="motion-point">contact outcome</span>
           </div>
         </div>
       </section>
@@ -259,6 +287,17 @@
               <figcaption>Study workflow from origin to write to physical contact.</figcaption>
             </figure>
           </div>
+          <div class="media-evidence-grid">
+            <figure class="media-card frame-swap">
+              <div class="frame-stage">
+                <img class="frame-no-read" src="assets/rss-terminal-no-read.png" alt="Sawyer terminal state without target readback" loading="lazy" />
+                <img class="frame-read" src="assets/rss-terminal-read.png" alt="Sawyer terminal state after one target readback" loading="lazy" />
+                <span class="frame-label label-no-read">NO READ</span>
+                <span class="frame-label label-read">ONE READ</span>
+              </div>
+              <figcaption>Animated still comparison · same negative-offset Sawyer case, two terminal states.</figcaption>
+            </figure>
+          </div>
         </div>
 
         <div class="shell study-panel ral-panel" id="ral-evidence">
@@ -303,6 +342,15 @@
             <figure>
               <img src="assets/ral-confirmation.png" alt="RA-L confirmation cohort paired outcomes" loading="lazy" />
               <figcaption>Confirmation cohort with matched terminal outcomes.</figcaption>
+            </figure>
+          </div>
+          <div class="media-evidence-grid single">
+            <figure class="media-card hover-zoom">
+              <div class="frame-stage">
+                <img src="assets/ral-fetch-example.png" alt="Fetch re-encoding comparison showing a miss for direct copying and success for re-encoding" loading="lazy" />
+                <span class="frame-label label-static">RA-L / FETCH</span>
+              </div>
+              <figcaption>Re-encoding relative to measured hand position rescues a Fetch replay without a target read.</figcaption>
             </figure>
           </div>
         </div>
