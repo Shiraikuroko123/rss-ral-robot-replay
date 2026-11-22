@@ -1,4 +1,12 @@
-# Robot Replay Research
+# Robot Replay Research · Archived Combined Page
+
+The canonical research pages are now split into two independent repositories:
+
+- [RSS · Cartesian Target Readback](https://github.com/Shiraikuroko123/rss-cartesian-target-replay)
+- [RA-L · Controller Target Readback](https://github.com/Shiraikuroko123/ral-controller-target-readback)
+
+This repository preserves the former combined page and its historical
+reproducibility artifacts.
 
 This repository contains the independent research page and reproducibility
 artifacts for two simulation studies by Zhangwei Chen.
