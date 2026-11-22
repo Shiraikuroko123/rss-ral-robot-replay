@@ -42,6 +42,22 @@ The `assets/videos/` directory contains selected 1920×1080, 20 FPS H.264 replay
 - RA-L Fetch paired direct-copy and measured-reference clips: `assets/videos/ral-fetch-*-1080p.mp4`
 - Provenance: `assets/videos/rss-render-manifest.json` and `assets/videos/ral-fetch-render-manifest.json`
 
+## Complex tabletop extension
+
+The public page also includes a separately labeled extension gallery for
+cluttered and partially occluded tabletop scenes:
+
+- `complex-online-six-objects.mp4` and `complex-online-seven-objects.mp4`
+  show exploratory OpenVLA-OFT online comparisons with periodic visual queries.
+- `complex-fixed-occlusion.mp4` and `complex-cross-task-drawer.mp4` show
+  fixed human-action replays used to isolate occlusion and physical-contact
+  effects.
+
+These clips are simulation evidence and are not additional RSS or RA-L trials.
+They do not change the paper statistics or establish a new algorithmic claim.
+The media provenance and source-report mapping are recorded in
+`assets/videos/complex-tabletop-manifest.json`.
+
 ## Website
 
 The repository root is a dependency-free GitHub Pages site. It follows the

@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#f4f1ea" />
     <meta
       name="description"
-      content="Robot Replay Research — two independent studies of hidden Cartesian controller targets, physical tracking, and the value of target readback."
+      content="Robot Replay Research — two independent studies of hidden Cartesian controller targets, physical tracking, and the value of target readback, with a separately labeled complex-tabletop extension."
     />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Robot Replay Research | RSS + RA-L" />
@@ -21,7 +21,7 @@
     <meta name="twitter:title" content="Robot Replay Research | RSS + RA-L" />
     <meta
       name="twitter:description"
-      content="Two controlled studies of hidden Cartesian controller targets, physical tracking, and target readback."
+      content="Two controlled studies of hidden Cartesian controller targets, physical tracking, and target readback, plus a separately labeled complex-tabletop extension."
     />
     <meta name="twitter:image" content="https://shiraikuroko123.github.io/rss-ral-robot-replay/assets/rss-study-workflow.png" />
     <link rel="canonical" href="https://shiraikuroko123.github.io/rss-ral-robot-replay/" />
@@ -43,6 +43,7 @@
           <a href="#question">Question</a>
           <a href="#papers">Papers</a>
           <a href="#evidence">Evidence</a>
+          <a href="#extensions">Extension</a>
           <a href="#reproduce">Reproduce</a>
         </nav>
         <div class="header-tools">
@@ -424,10 +425,96 @@
         </div>
       </section>
 
+      <section class="section extension-section" id="extensions" aria-labelledby="extensions-title">
+        <div class="shell section-heading">
+          <div>
+            <p class="section-index">04 / COMPLEX TABLETOP EXTENSION</p>
+            <h2 id="extensions-title">The same replay question under clutter, occlusion, and contact.</h2>
+          </div>
+          <p class="section-side-note">
+            These clips extend the evaluation to crowded tabletop scenes. They are supplementary development evidence,
+            separate from the principal RSS and RA-L cohorts.
+          </p>
+        </div>
+
+        <div class="shell extension-boundary">
+          <div class="extension-boundary-mark">SCOPE</div>
+          <p>
+            The extension asks whether a replay remains sensitive to visual occlusion and movable clutter. The
+            online clips use OpenVLA-OFT with periodic visual queries. The fixed-tape clips replay recorded actions
+            to isolate contact and occlusion effects. None of these clips adds a new RSS or RA-L trial.
+          </p>
+          <span class="extension-boundary-tag">SIMULATION · SUPPLEMENTARY · NO NEW PAPER CLAIM</span>
+        </div>
+
+        <div class="shell extension-grid">
+          <figure class="media-card extension-card">
+            <div class="video-stage">
+              <video aria-label="OpenVLA-OFT online replay on a six-object cluttered tabletop" controls preload="none" poster="assets/videos/complex-online-six-objects-poster.jpg" width="1280" height="1080">
+                <source src="assets/videos/complex-online-six-objects.mp4" type="video/mp4" />
+              </video>
+              <span class="extension-chip">ONLINE · SIX OBJECTS</span>
+            </div>
+            <figcaption>
+              <strong>OpenVLA-OFT under clutter</strong>
+              <span>LIBERO Spatial bowl placement · original tabletop versus six-object clutter · periodic visual queries on A800 · exploratory comparison</span>
+            </figcaption>
+          </figure>
+
+          <figure class="media-card extension-card">
+            <div class="video-stage">
+              <video aria-label="OpenVLA-OFT online replay with a seven-object tabletop and external-camera occlusion" controls preload="none" poster="assets/videos/complex-online-seven-objects-poster.jpg" width="1280" height="800">
+                <source src="assets/videos/complex-online-seven-objects.mp4" type="video/mp4" />
+              </video>
+              <span class="extension-chip">ONLINE · SEVEN OBJECTS</span>
+            </div>
+            <figcaption>
+              <strong>Occluded target with dual cameras</strong>
+              <span>LIBERO Spatial bowl placement · juice carton visible or hidden to the external camera · wrist view and proprioception held fixed</span>
+            </figcaption>
+          </figure>
+
+          <figure class="media-card extension-card">
+            <div class="video-stage">
+              <video aria-label="Fixed action replay comparing original and occluded pantry layouts" controls preload="none" poster="assets/videos/complex-fixed-occlusion-poster.jpg" width="1920" height="1080">
+                <source src="assets/videos/complex-fixed-occlusion.mp4" type="video/mp4" />
+              </video>
+              <span class="extension-chip">FIXED TAPE · OCCLUSION</span>
+            </div>
+            <figcaption>
+              <strong>Occlusion and collision sensitivity</strong>
+              <span>Recorded arm actions replayed on matched pantry layouts · fixed action tape · contact and endpoint effects tracked separately</span>
+            </figcaption>
+          </figure>
+
+          <figure class="media-card extension-card">
+            <div class="video-stage">
+              <video aria-label="Fixed human-action replay of drawer opening with movable tabletop clutter" controls preload="none" poster="assets/videos/complex-cross-task-drawer-poster.jpg" width="1920" height="1080">
+                <source src="assets/videos/complex-cross-task-drawer.mp4" type="video/mp4" />
+              </video>
+              <span class="extension-chip">FIXED TAPE · CROSS TASK</span>
+            </div>
+            <figcaption>
+              <strong>Clutter across three LIBERO-Goal tasks</strong>
+              <span>Drawer, stove, and container-placement demonstrations with six movable objects · human actions replayed at 20 Hz</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <div class="shell extension-note">
+          <p>
+            <b>How to read this section.</b> These videos motivate a future matched study in which target readback,
+            hand feedback, and clutter are varied together. They currently support an external-validity discussion
+            and a reproducible stress test, not a new algorithmic contribution.
+          </p>
+          <a class="text-button" href="assets/videos/complex-tabletop-manifest.json">Open provenance manifest ↗</a>
+        </div>
+      </section>
+
       <section class="section relation-section">
         <div class="shell relation-grid">
           <div>
-            <p class="section-index">04 / HOW THEY FIT</p>
+            <p class="section-index">05 / HOW THEY FIT</p>
             <h2>A shared setup, two non-overlapping conclusions.</h2>
           </div>
           <div class="relation-copy">
@@ -450,7 +537,7 @@
       <section class="section reproduce-section" id="reproduce">
         <div class="shell reproduce-grid">
           <div>
-            <p class="section-index">05 / REPRODUCE</p>
+            <p class="section-index">06 / REPRODUCE</p>
             <h2>Read the figures, then open the sources.</h2>
             <p class="section-intro">
               The repository keeps the two paper trees separate. PDFs are linked directly from each paper row, while

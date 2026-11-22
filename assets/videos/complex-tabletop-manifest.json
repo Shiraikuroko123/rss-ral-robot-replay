@@ -1,0 +1,57 @@
+{
+  "title": "Complex tabletop extension media",
+  "status": "supplementary-development-evidence",
+  "scope": "These clips extend the public RSS/RA-L research page to cluttered and partially occluded tabletop scenes. They are not additional RSS or RA-L trials and are not included in the paper statistics.",
+  "reality": "simulation",
+  "video_format": {
+    "codec": "H.264",
+    "container": "MP4",
+    "control_rate_hz": 20
+  },
+  "records": [
+    {
+      "file": "complex-online-six-objects.mp4",
+      "source_report": "research_upgrade_20261119/occluded-pantry-001/RESULT_ZH.md",
+      "source_media": "observer-video-20261119/online-six-objects/online-original-vs-six-objects.mp4",
+      "task": "LIBERO Spatial bowl placement",
+      "condition": "Original tabletop versus six-object clutter",
+      "policy": "OpenVLA-OFT with periodic visual queries",
+      "status": "exploratory online comparison",
+      "resolution": "1280x1080",
+      "duration_seconds": 11.05
+    },
+    {
+      "file": "complex-online-seven-objects.mp4",
+      "source_report": "research_upgrade_20261119/occluded-pantry-001/RESULT_ZH.md",
+      "source_media": "observer-video-20261119/online-seven-objects/online-pantry-dual-camera.mp4",
+      "task": "LIBERO Spatial bowl placement",
+      "condition": "Seven-object tabletop with an external-camera occluder",
+      "policy": "OpenVLA-OFT with periodic visual queries",
+      "status": "exploratory online dual-camera comparison",
+      "resolution": "1280x800",
+      "duration_seconds": 3.95
+    },
+    {
+      "file": "complex-fixed-occlusion.mp4",
+      "source_report": "research_upgrade_20261119/occluded-pantry-001/RESULT_ZH.md",
+      "source_media": "observer-video-20261119/clutter-physical-replay/normal-vs-pantry/normal-vs-pantry-1080p.mp4",
+      "task": "LIBERO Spatial bowl placement",
+      "condition": "Matched fixed action replay on original and cluttered pantry layouts",
+      "policy": "Recorded action tape, no policy query on the extended layout",
+      "status": "fixed-tape contact and occlusion stress test",
+      "resolution": "1920x1080",
+      "duration_seconds": 4.15
+    },
+    {
+      "file": "complex-cross-task-drawer.mp4",
+      "source_report": "research_upgrade_20261120/cross-task-clutter-001/RESULTS_ZH.md",
+      "source_media": "research_upgrade_20261120/cross-task-clutter-001/drawer-film/drawer-comparison.mp4",
+      "task": "LIBERO-Goal drawer opening",
+      "condition": "Six movable objects with normal contact versus tabletop-only contact",
+      "policy": "Human demonstration replay at 20 Hz",
+      "status": "cross-task fixed-tape physical-contact study",
+      "resolution": "1920x1080",
+      "duration_seconds": 6.95
+    }
+  ]
+}
