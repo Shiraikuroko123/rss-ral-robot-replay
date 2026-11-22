@@ -34,6 +34,14 @@ cohorts, and figures. Neither manuscript claims real-robot deployment or a
 universal readback policy. The public page labels the current documents as
 submission or manuscript drafts.
 
+## Rendered evidence videos
+
+The `assets/videos/` directory contains selected 1920×1080, 20 FPS H.264 replays regenerated from the frozen RSS and RA-L trajectory archives. The accompanying manifests record source archive hashes, method, seed, condition, resolution, and output hashes. The clips are demonstration artifacts and do not add new experimental trials.
+
+- RSS Sawyer paired rescue and loss clips: `assets/videos/rss-sawyer-*-1080p.mp4`
+- RA-L Fetch paired direct-copy and measured-reference clips: `assets/videos/ral-fetch-*-1080p.mp4`
+- Provenance: `assets/videos/rss-render-manifest.json` and `assets/videos/ral-fetch-render-manifest.json`
+
 ## Website
 
 The repository root is a dependency-free GitHub Pages site. It follows the

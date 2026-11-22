@@ -1,0 +1,104 @@
+{
+  "generated_at_utc": "2026-11-22T02:21:20.440699+00:00",
+  "source_report": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch",
+  "environment": {
+    "gymnasium": "1.2.3",
+    "gymnasium_robotics": "1.4.2",
+    "mujoco": "3.3.7"
+  },
+  "resolution": [
+    1920,
+    1080
+  ],
+  "fps": 20,
+  "videos": [
+    {
+      "file": "D:\\arm-planning-control-project\\rendered\\rss-ral\\ral-fetch-pick-place-drop-copy-202611204-1080p.mp4",
+      "task": "FetchPickAndPlace-v4",
+      "seed": 202611204,
+      "condition": "drop",
+      "method": "copy",
+      "method_label": "DIRECT COPY",
+      "onset": 10,
+      "success": 0,
+      "source_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPickAndPlace-v4\\202611204\\source.npz",
+      "source_npz_sha256": "74170ac8a4a61f3e5b2fdebb03a063b69242d9bbf2701a5a7710cff52d8afbab",
+      "condition_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPickAndPlace-v4\\202611204\\drop.npz",
+      "condition_npz_sha256": "80e04cac06bae3bf6f503f68703620fd551ec7349a6bd13dd5731b655f47fb16",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": 20,
+      "frames": 80,
+      "sha256": "125db47a5c54badd60bed0b6ee1f3576d34e06f490c982f4675ac4b761776039",
+      "bytes": 239685
+    },
+    {
+      "file": "D:\\arm-planning-control-project\\rendered\\rss-ral\\ral-fetch-pick-place-drop-event5-202611204-1080p.mp4",
+      "task": "FetchPickAndPlace-v4",
+      "seed": 202611204,
+      "condition": "drop",
+      "method": "event5",
+      "method_label": "MEASURED-REFERENCE + HAND FEEDBACK",
+      "onset": 10,
+      "success": 1,
+      "source_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPickAndPlace-v4\\202611204\\source.npz",
+      "source_npz_sha256": "74170ac8a4a61f3e5b2fdebb03a063b69242d9bbf2701a5a7710cff52d8afbab",
+      "condition_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPickAndPlace-v4\\202611204\\drop.npz",
+      "condition_npz_sha256": "80e04cac06bae3bf6f503f68703620fd551ec7349a6bd13dd5731b655f47fb16",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": 20,
+      "frames": 80,
+      "sha256": "ac359b795cf961d18ffb40ad17af3d0541b6f154c6451a34bbf46266cef797f4",
+      "bytes": 246718
+    },
+    {
+      "file": "D:\\arm-planning-control-project\\rendered\\rss-ral\\ral-fetch-push-drop-copy-202611203-1080p.mp4",
+      "task": "FetchPush-v4",
+      "seed": 202611203,
+      "condition": "drop",
+      "method": "copy",
+      "method_label": "DIRECT COPY",
+      "onset": 8,
+      "success": 0,
+      "source_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPush-v4\\202611203\\source.npz",
+      "source_npz_sha256": "f6392be5c6348a26bef3026d28b96eaf24641a6a629466158582f8f78aa9cfec",
+      "condition_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPush-v4\\202611203\\drop.npz",
+      "condition_npz_sha256": "96703633c8c4636ec1847cd99a9b471c1d8f13fe630869ff36f83b8331a05861",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": 20,
+      "frames": 80,
+      "sha256": "482c242b2686705dbc6ff083664600529f0a5670ba157cc5c536182be7a7cacc",
+      "bytes": 238271
+    },
+    {
+      "file": "D:\\arm-planning-control-project\\rendered\\rss-ral\\ral-fetch-push-drop-event5-202611203-1080p.mp4",
+      "task": "FetchPush-v4",
+      "seed": 202611203,
+      "condition": "drop",
+      "method": "event5",
+      "method_label": "MEASURED-REFERENCE + HAND FEEDBACK",
+      "onset": 8,
+      "success": 1,
+      "source_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPush-v4\\202611203\\source.npz",
+      "source_npz_sha256": "f6392be5c6348a26bef3026d28b96eaf24641a6a629466158582f8f78aa9cfec",
+      "condition_npz": "D:\\arm-planning-control-project\\project\\reports\\replay_upgrade_20261120\\fetch\\heldout\\FetchPush-v4\\202611203\\drop.npz",
+      "condition_npz_sha256": "96703633c8c4636ec1847cd99a9b471c1d8f13fe630869ff36f83b8331a05861",
+      "resolution": [
+        1920,
+        1080
+      ],
+      "fps": 20,
+      "frames": 80,
+      "sha256": "68d2b16921f4d8833720e57011ae0ed16e7babf956819976ceabc4bfa201bc91",
+      "bytes": 252702
+    }
+  ]
+}

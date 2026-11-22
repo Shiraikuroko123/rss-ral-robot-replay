@@ -260,6 +260,10 @@ figcaption { color: var(--muted); font-size: 10px; line-height: 1.4; padding-top
 .figure-strip img { width: 100%; height: 170px; object-fit: contain; background: rgba(255,255,255,.42); }
 .media-evidence-grid { display: grid; grid-template-columns: 1fr; gap: 18px; border-top: 1px solid rgba(27,33,30,.17); padding-top: 25px; margin-top: 25px; }
 .media-evidence-grid.single { max-width: 650px; }
+.video-evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; border-top: 1px solid rgba(27,33,30,.17); padding-top: 25px; margin-top: 25px; }
+.video-stage { position: relative; background: #101b19; overflow: hidden; }
+.video-stage video { width: 100%; aspect-ratio: 16 / 9; display: block; object-fit: cover; }
+.video-card figcaption { min-height: 30px; }
 .media-card { margin: 0; padding: 13px; background: rgba(255,255,255,.48); overflow: hidden; }
 .frame-stage { position: relative; background: #f9f8f4; overflow: hidden; }
 .frame-stage img { width: 100%; aspect-ratio: 1.5; object-fit: contain; display: block; }
@@ -362,6 +366,7 @@ pre code { font-family: "IBM Plex Mono", Consolas, monospace; font-size: 11px; l
   .study-header { display: block; }
   .study-pullquote { border-left: 0; border-top: 1px solid rgba(27,33,30,.2); padding: 14px 0 0; margin-top: 22px; }
   .figure-strip { grid-template-columns: 1fr; }
+  .video-evidence-grid { grid-template-columns: 1fr; }
   .figure-strip img { height: 155px; }
 }
 
